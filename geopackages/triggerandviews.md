@@ -67,4 +67,4 @@ DROP TRIGGER triggername;
 ```
 ## zusätzliche Infos
 - Geopackages können auch mit anderer Software bearbeitet werden (z.B. SQLite Studio)
-- 
+- Zahlreiche PostGIS Funktionen funktionieren auch in Geopackages (z.B. ST_BUFFER, ST_INTERSECTS, ST_UNION etc.)
