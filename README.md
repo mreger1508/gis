@@ -2,4 +2,4 @@
 GIS Tipps &amp; Tricks
 
 ## QGIS
-[Layerstyling](./layerstyling)
+[Layerstyling](./qgis/layerstyling)
