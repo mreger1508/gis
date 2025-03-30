@@ -26,3 +26,13 @@ Hier muss **features** als Data-Type angegeben werden und außerdem die ID des K
 insert into gpkg_contents (table_name, data_type, identifier, srs_id)
 values ('viewname', 'features', 'viewname', 25832)
 ```
+## Löschen von Views (oder Tabellen)
+Um Views (oder Tabellen) aus dem Geopackage zu entfernen, eignet sich folgendes SQL-Statement:<br>
+```
+DROP VIEW viewname
+```
+Dadurch verschwindet allerdings noch nicht der Eintrag in **gpkg_contents**. Um das zu erreichen, eignet sich folgendes SQL-Statement:<br>
+```
+DELETE FROM gpkg_contents WHERE table_name = viewname
+```
+**viewname** ist jeweils durch den Namen der View (oder Tabelle) zu ersetzen.
