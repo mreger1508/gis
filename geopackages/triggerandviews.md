@@ -3,13 +3,13 @@ Da Geopackages auf SQLite basieren, ist es möglich, Trigger und Views in Geopac
 Es gibt allerdings einige Besonderheiten, die dabei zu beachten sind. Im folgenden werden die nötigen Schritte beschrieben.<br>
 ## Geopackage öffnen
 Über die QGIS-DB-Verwaltung kann man sich mit einem Geopackage verbinden. Dazu muss man zuerst im Browser-Fenster nach dem gewünschten Geopackage suchen und mit einem Rechtsklick aus dem Menü **Verbindung hinzufügen** auswählen:<br>
-<img src="./data/gpkg_connection.png" width="300"><br><br>
+<img src="./data/gpkg_connection.png" width="300"><br>
 Danach ist das Geopackage unter **GeoPackage** im Browserfenster mit den registrierten Tabellen sichtbar:<br>
-<img src="./data/gpkg_browser.png" width="300"><br><br>
+<img src="./data/gpkg_browser.png" width="300"><br>
 Nun kann man über die DB-Verwaltung in QGIS über die markierte Schaltfläche oben links ein SQL-Abfragefenster zum ausgewählten Geopackage öffnen<br>
-<img src="./data/gpkg_db_manager.png" width="700"><br><br>
+<img src="./data/gpkg_db_manager.png" width="700"><br>
 Im SQL-Abfragefenster können nun beliebige Abfragen, die mit SQLite kompatibel sind, ausgeführt werden. Im Gegensatz zu PostgreSQL/PostGIS muss kein Schema vor den Tabellennamen. Bitte beachten, dass die Syntax zwar ähnlich zu PostgreSQL/PostGIS ist, aber nicht alle Funktionalitäten komplett identisch sind. Die Ausgabe wird unter dem Fenster der SQL-Eingabe angezeigt.<br>
-<img src="./data/gpkg_query.png" width="700"><br><br>
+<img src="./data/gpkg_query.png" width="700"><br>
 ## Erstellung von Views
 Eine View in einem Geopackage zu erstellen funktioniert grundsätzlich ähnlich wie in PostgreSQL/PostGIS:<br>
 `CREATE VIEW viewname AS ...gewünschtes SQL-Statement (z.B. SELECT * FROM ...)...`<br>
@@ -36,3 +36,20 @@ Dadurch verschwindet allerdings noch nicht der Eintrag in **gpkg_contents**. Um 
 DELETE FROM gpkg_contents WHERE table_name = viewname
 ```
 **viewname** ist jeweils durch den Namen der View (oder Tabelle) zu ersetzen.
+## Trigger erstellen
+Um automatische Änderungen beim Einfügen, Löschen oder Updaten von Features im Geopackage einzurichten, können Trigger erstellt werden. Das kann durch das folgende SQL-Statement erfolgen:
+```
+CREATE TRIGGER triggername
+AFTER UPDATE OF spaltenname ON tabellenname
+BEGIN
+  UPDATE tabellenname
+  SET spaltenname = gewünschter Wert
+END; 
+```
+Mit dem gezeigten Code kann ein Trigger erstellt werden, der beim Updaten von Features in Kraft tritt. Soll der Trigger beim Löschen ausgelöst werden, muss **AFTER UPDATE** durch **AFTER DELETE** ersetzt werden. Soll der Trigger beim Einfügen neuer Features ausgelöst werden, dann muss **AFTER UPDATE** durch **AFTER INSERT** ersetzt werden.<br>
+Der Trigger muss nicht in **gpkg_contents** registriert werden.
+## Trigger löschen
+Der Trigger kann durch folgendes Statement wieder entfernt werden:
+```
+DROP TRIGGER triggername;
+```
