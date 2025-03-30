@@ -1,2 +1,2 @@
-# gis
+# GIS
 GIS Tipps &amp; Tricks
