@@ -10,7 +10,7 @@ Nun kann man über die DB-Verwaltung in QGIS über die markierte Schaltfläche o
 <img src="./data/gpkg_db_manager.png" width="700"><br>
 Im SQL-Abfragefenster können nun beliebige Abfragen, die mit SQLite kompatibel sind, ausgeführt werden. Im Gegensatz zu PostgreSQL/PostGIS muss kein Schema vor den Tabellennamen. Bitte beachten, dass die Syntax zwar ähnlich zu PostgreSQL/PostGIS ist, aber nicht alle Funktionalitäten komplett identisch sind. Die Ausgabe wird unter dem Fenster der SQL-Eingabe angezeigt.<br>
 <img src="./data/gpkg_query.png" width="700"><br>
-## Erstellung von Views
+## Erstellung von Views (oder Tabellen)
 Eine View in einem Geopackage zu erstellen funktioniert grundsätzlich ähnlich wie in PostgreSQL/PostGIS:<br>
 `CREATE VIEW viewname AS ...gewünschtes SQL-Statement (z.B. SELECT * FROM ...)...`<br>
 Der Unterschied beim Geopackge ist allerdings, dass die View erst im Geopackage registriert werden muss, damit sie in QGIS sichtbar wird. Das muss in der Tabelle **gpkg_contents** passieren. Um die Eintragung vorzunehmen, kann folgendes SQL-Statement ausgeführt werden:<br>
@@ -26,6 +26,18 @@ Hier muss **features** als Data-Type angegeben werden und außerdem die ID des K
 insert into gpkg_contents (table_name, data_type, identifier, srs_id)
 values ('viewname', 'features', 'viewname', 25832)
 ```
+Außerdem muss die Geometriespalte in **gpkg_geometry_columns** angemeldet werden:
+```
+insert into gpkg_geometry_columns (table_name, column_name, geometry_type_name, srs_id, z, m)
+  values ('viewname','geom','GEOMETRY',25832,0,0)
+```
+**GEOMETRY** muss durch den passenden Geometrietypen ersetzt werden (z.B. (Multi-)Point, (Multi-)Linestring, (Multi-)Polygon). Das SRS kann auch ein anderes sein als 25832.
+Zustäzlich dazu muss noch der Feature Count bei der Anlage neuer Tabellen angelegt werden (gilt nicht für Views):
+```
+insert into gpkg_ogr_contents (table_name, feature_count)
+values('tablename', (select count(fid) from tablename))
+```
+In allen Code-Snippets muss **viewname** oder **tablename** durch den entsprechenden Namen der View oder der Tabelle ersetzt werden.
 ## Löschen von Views (oder Tabellen)
 Um Views (oder Tabellen) aus dem Geopackage zu entfernen, eignet sich folgendes SQL-Statement:<br>
 ```
@@ -53,3 +65,6 @@ Der Trigger kann durch folgendes Statement wieder entfernt werden:
 ```
 DROP TRIGGER triggername;
 ```
+## zusätzliche Infos
+- Geopackages können auch mit anderer Software bearbeitet werden (z.B. SQLite Studio)
+- 
