@@ -31,7 +31,7 @@ Außerdem muss die Geometriespalte in **gpkg_geometry_columns** angemeldet werde
 insert into gpkg_geometry_columns (table_name, column_name, geometry_type_name, srs_id, z, m)
   values ('viewname','geom','GEOMETRY',25832,0,0)
 ```
-**GEOMETRY** muss durch den passenden Geometrietypen ersetzt werden (z.B. (Multi-)Point, (Multi-)Linestring, (Multi-)Polygon). Das SRS kann auch ein anderes sein als 25832.
+**GEOMETRY** muss durch den passenden Geometrietypen ersetzt werden (z.B. (Multi-)Point, (Multi-)Linestring, (Multi-)Polygon). Das SRS kann auch ein anderes sein als 25832.<br>
 Zustäzlich dazu muss noch der Feature Count bei der Anlage neuer Tabellen angelegt werden (gilt nicht für Views):
 ```
 insert into gpkg_ogr_contents (table_name, feature_count)
