@@ -1,8 +1,8 @@
 # GIS
 GIS Tipps &amp; Tricks
 
-### QGIS
+## QGIS
 [Layerstyling](./qgis/layerstyling)
 
-### Arbeiten mit Geopackages
+## Arbeiten mit Geopackages
 [Trigger & Views in Geopackages](./geopackages/triggerandviews.md)
